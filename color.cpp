@@ -98,7 +98,7 @@ namespace Color {
     class HSV {
         public:
             HSV() : Hue(0), Saturation(0), Value(0) {}
-            HSV(double hue, double saturation, double value) : Hue(hue), Saturation(saturation), Value(value) {}
+            HSV(double hue, double saturation, double value) : Hue(hue > 360 ? 360 : hue), Saturation(saturation > 1 ? 1 : saturation), Value(value > 1 ? 1 : value) {}
             ~HSV() {}
 
             void operator=(RGB& rgb) {
