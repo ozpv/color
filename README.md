@@ -1,5 +1,5 @@
 # color
-Convert to and from RGB, HSL, HSV, and HEX in C++
+Convert to and from RGB, HSL, HSV, CMY, CMYK, and HEX in C++
 
 ## How to Use:
 
