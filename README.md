@@ -33,6 +33,6 @@ std::cout << hsv << std::endl;
 ```
 
 ## Why private the variables and friend each class?
-Using getters and setters will ensure that HEX has a 24-bit integer MAX
-You can implement them inside of the classes
+Using getters and setters will ensure that HEX has a 24-bit integer MAX.
+You can implement them inside of the classes.
 In WIN32, there is an RGB to RGBQUAD getter by default.
