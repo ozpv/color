@@ -186,7 +186,7 @@ namespace Color {
         private:
         #ifdef _MSC_VER
             #pragma pack(push, 1)
-                typedef struct __attribute__((packed)) {
+                typedef struct {
                     uint32_t value : 24;
                 } uint24_t;
             #pragma pack(pop)
