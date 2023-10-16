@@ -77,7 +77,7 @@ namespace Color {
                 *this = RGB(HSV_To_RGB(hsv));
             }
             
-        #ifdef _WIN32
+        #if __has_include(<windows.h>)
             RGBQUAD RGB_To_RGBQUAD() {
                 return { this->Red, this->Green, this->Blue, this->Reserved }; 
             }
@@ -99,7 +99,7 @@ namespace Color {
             uint8_t Red;
             uint8_t Green;
             uint8_t Blue;
-        #ifdef _WIN32
+        #if __has_include(<windows.h>)
             const uint8_t Reserved = 0;
         #endif
     };
