@@ -26,10 +26,7 @@ namespace Color {
             ~CMY() {}
 
             void operator=(RGB& rgb) {
-                CMY cmy(RGB_To_CMY(rgb));
-                this->Cyan = cmy.Cyan;
-                this->Magenta = cmy.Magenta;
-                this->Yellow = cmy.Yellow;
+                *this = CMY(RGB_To_CMY(rgb));
             }
 
             friend std::ostream& operator<<(std::ostream& out, const CMY& cmy) {
@@ -53,11 +50,7 @@ namespace Color {
             ~CMYK() {}
 
             void operator=(RGB& rgb) {
-                CMYK cmyk(RGB_To_CMYK(rgb));
-                this->Cyan = cmyk.Cyan;
-                this->Magenta = cmyk.Magenta;
-                this->Yellow = cmyk.Yellow;
-                this->Key = cmyk.Key;
+                *this = CMYK(RGB_To_CMYK(rgb));
             }
 
             friend std::ostream& operator<<(std::ostream& out, const CMYK& cmyk) {
@@ -77,17 +70,11 @@ namespace Color {
             ~RGB() {}
 
             void operator=(HSL& hsl) {
-                RGB rgb(HSL_To_RGB(hsl));
-                this->Red = rgb.Red;
-                this->Green = rgb.Green;
-                this->Blue = rgb.Blue;
+                *this = RGB(HSL_To_RGB(hsl));
             }
 
             void operator=(HSV& hsv) {
-                RGB rgb(HSV_To_RGB(hsv));
-                this->Red = rgb.Red;
-                this->Green = rgb.Green;
-                this->Blue = rgb.Blue;
+                *this = RGB(HSV_To_RGB(hsv));
             }
             
         #ifdef _WIN32
@@ -124,17 +111,11 @@ namespace Color {
             ~HSL() {}
 
             void operator=(RGB& rgb) {
-                HSL hsl(RGB_To_HSL(rgb));
-                this->Hue = hsl.Hue;
-                this->Saturation = hsl.Saturation;
-                this->Lightness = hsl.Lightness;
+                *this = HSL(RGB_To_HSL(rgb));
             }
 
             void operator=(HSV& hsv) {
-                HSL hsl(HSV_To_HSL(hsv));
-                this->Hue = hsl.Hue;
-                this->Saturation = hsl.Saturation;
-                this->Lightness = hsl.Lightness;
+                *this = HSL(HSV_To_HSL(hsv));
             }
 
             friend std::ostream& operator<<(std::ostream& out, const HSL& hsl) {
@@ -159,17 +140,11 @@ namespace Color {
             ~HSV() {}
 
             void operator=(RGB& rgb) {
-                HSV hsv(RGB_To_HSV(rgb));
-                this->Hue = hsv.Hue;
-                this->Saturation = hsv.Saturation;
-                this->Value = hsv.Value;
+                *this = HSV(RGB_To_HSV(rgb));
             }
 
             void operator=(HSL& hsl) {
-                HSV hsv(HSL_To_HSV(hsl));
-                this->Hue = hsv.Hue;
-                this->Saturation = hsv.Saturation;
-                this->Value = hsv.Value;
+                *this = HSV(HSL_To_HSV(hsl));
             }
 
             friend std::ostream& operator<<(std::ostream& out, const HSV& hsv) {
@@ -194,13 +169,11 @@ namespace Color {
             ~HEX() {}
 
             void operator=(RGB& rgb) {
-                HEX hex(RGB_To_HEX(rgb));
-                this->Hex = hex.Hex;
+                *this = HEX(RGB_To_HEX(rgb));
             }
 
             void operator=(HSL& hsl) {
-                HEX hex(HSL_To_HEX(hsl));
-                this->Hex = hex.Hex;
+                *this = HEX(HSL_To_HEX(hsl));
             }
             
             friend std::ostream& operator<<(std::ostream& out, const HEX& hex) {
