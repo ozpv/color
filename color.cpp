@@ -164,8 +164,8 @@ namespace Color {
 
     class HEX {
         public:
-            HEX() : Hex(0x000000) {}
-            HEX(uint32_t hex) : Hex(hex & 0xFFFFFF) {}
+            HEX() { Hex.value = 0x000000; }
+            HEX(uint32_t hex) { Hex.value = hex; }
             ~HEX() {}
 
             void operator=(RGB& rgb) {
@@ -177,14 +177,28 @@ namespace Color {
             }
             
             friend std::ostream& operator<<(std::ostream& out, const HEX& hex) {
-                out << "0x" << std::hex << std::uppercase << hex.Hex << std::dec;
+                out << "0x" << std::hex << std::uppercase << hex.Hex.value << std::dec;
                 return out;
             }
 
             friend HEX RGB_To_HEX(RGB& rgb);
             friend HEX HSL_To_HEX(HSL& hsl);
         private:
-            uint32_t Hex;
+        #ifdef _MSC_VER
+            #pragma pack(push, 1)
+                typedef struct __attribute__((packed)) {
+                    uint32_t value : 24;
+                } uint24_t;
+            #pragma pack(pop)
+        #else
+            #ifndef __GNUC__
+                #define __attribute__(x)
+            #endif
+            typedef struct __attribute__((packed)) {
+                uint32_t value : 24;
+            } uint24_t;
+        #endif
+            uint24_t Hex;
     };
 
     template<typename Type>
@@ -447,7 +461,7 @@ namespace Color {
 
     HEX RGB_To_HEX(RGB& rgb) {
         HEX hex;
-        hex.Hex = ((rgb.Red) << 16) + ((rgb.Green) << 8) + (rgb.Blue);
+        hex.Hex.value = ((rgb.Red) << 16) + ((rgb.Green) << 8) + (rgb.Blue);
         return hex;
     }
 
@@ -456,33 +470,33 @@ namespace Color {
         RGB rgb;
         rgb = hsl;
         hex = RGB_To_HEX(rgb);
-        return hex.Hex;
+        return hex.Hex.value;
     }
 }
 
 using namespace Color;
 
 int main(void) {
-    HSL hsl(34.0, 0.3, 0.5);
+    RGB rgb(141, 178, 148);
     HSV hsv;
-    RGB rgb;
     CMYK cmyk;
 
-    hsv = hsl;
-
-    std::cout << hsl << std::endl;
-    
-    std::cout << hsv << std::endl;
-
-    hsl = hsv;
-
-    std::cout << hsl << std::endl;
-
-    rgb = hsl;
-
+    hsv = rgb;
     cmyk = rgb;
 
+    std::cout << rgb << std::endl;
+    std::cout << hsv << std::endl;
     std::cout << cmyk << std::endl;
+
+    rgb = hsv;
+
+    std::cout << rgb << std::endl;
+
+    HEX hex;
+
+    hex = rgb;
+
+    std::cout << hex << std::endl;
 
     return 0;
 }
