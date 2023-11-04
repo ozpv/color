@@ -222,7 +222,7 @@ namespace Color {
 			value -= mod;
             tmod(value, mod);
 		}
-		return t;
+		return value;
 	}
 
     inline double Hue_To_Color(double p, double q, double t) {
