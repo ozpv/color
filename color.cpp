@@ -201,34 +201,28 @@ namespace Color {
             uint24_t Hex;
     };
 
-    template<typename Type>
-    inline Type tmax(Type a, Type b) {
+    template<typename Type> inline Type tmax(Type a, Type b) {
 	    return (a > b) ? a : b;
     }
 
-    template<typename Type>
-    inline Type tmin(Type a, Type b) {
+    template<typename Type> inline Type tmin(Type a, Type b) {
     	return (a < b) ? a : b;
     }
 
-    template<typename Type>
-    inline Type tmax3(Type a, Type b, Type c) {
+    template<typename Type> inline Type tmax3(Type a, Type b, Type c) {
     	return tmax<Type>(tmax<Type>(a, b), c);
     }
 
-    template<typename Type>
-    inline Type tmin3(Type a, Type b, Type c) {
+    template<typename Type> inline Type tmin3(Type a, Type b, Type c) {
     	return tmin<Type>(tmin<Type>(a, b), c);
     }
 
-    template<typename Type>
-    inline Type tmod(Type value, Type mod) {
+    template<typename Type> inline Type tmod(Type value, Type mod) {
 		if (value >= mod) {
 			value -= mod;
-			/* recursion to ensure the MOD value */
-			tmod(value, mod);
+            tmod(value, mod);
 		}
-		return value;
+		return t;
 	}
 
     inline double Hue_To_Color(double p, double q, double t) {
@@ -299,28 +293,28 @@ namespace Color {
     RGB HSL_To_RGB(HSL& hsl) {
         RGB rgb;
 
-	double k;
+	    double k;
 
-	double a = hsl.Saturation * tmin<double>(hsl.Lightness, 1.0 - hsl.Lightness);
+	    double a = hsl.Saturation * tmin<double>(hsl.Lightness, 1.0 - hsl.Lightness);
 
-	/* to catch our RGB values */
-	double rgbd[3];
+	    /* to catch our RGB values */
+	    double rgbd[3];
 
-	/* to calculate f(0) f(8) f(4) */
-	double n[3] = { 0.0, 8.0, 4.0 };
+	    /* to calculate f(0) f(8) f(4) */
+	    double n[3] = { 0.0, 8.0, 4.0 };
 
-	for (int i = 0; i < 3; i++) {
-		k = (n[i] + hsl.Hue / 30.0);
+	    for (int i = 0; i < 3; i++) {
+	    	k = (n[i] + hsl.Hue / 30.0);
 
-		/* simple mod template */
-		k = tmod<double>(k, 12.0);
+	    	/* simple mod template */
+	    	k = tmod<double>(k, 12.0);
 
-		rgbd[i] = hsl.Lightness - a * tmax<double>(-1.0, tmin3<double>(k - 3.0, 9.0 - k, 1.0));
-	}
+	    	rgbd[i] = hsl.Lightness - a * tmax<double>(-1.0, tmin3<double>(k - 3.0, 9.0 - k, 1.0));
+	    }   
 
-	rgb.Red = static_cast<uint8_t>(rgbd[0] * 255.0);
-	rgb.Green = static_cast<uint8_t>(rgbd[1] * 255.0);
-	rgb.Blue = static_cast<uint8_t>(rgbd[2] * 255.0);
+	    rgb.Red = static_cast<uint8_t>(rgbd[0] * 255.0);
+	    rgb.Green = static_cast<uint8_t>(rgbd[1] * 255.0);
+	    rgb.Blue = static_cast<uint8_t>(rgbd[2] * 255.0);
 
         return rgb;
     }
@@ -328,26 +322,26 @@ namespace Color {
     RGB HSV_To_RGB(HSV& hsv) {
         RGB rgb;
 
-	double k;
+	    double k;
 
-	/* to catch our RGB values */
-	double rgbd[3];
+	    /* to catch our RGB values */
+	    double rgbd[3];
 
-	/* to calculate f(5) f(3) f(1) */
-	double n[3] = { 5.0, 3.0, 1.0 };
+	    /* to calculate f(5) f(3) f(1) */
+	    double n[3] = { 5.0, 3.0, 1.0 };
 
-	for (int i = 0; i < 3; i++) {
-		k = (n[i] + hsv.Hue / 60.0);
+	    for (int i = 0; i < 3; i++) {
+	    	k = (n[i] + hsv.Hue / 60.0);
 
-		/* simple mod template */
-		k = tmod<double>(k, 6.0);
+	    	/* simple mod template */
+	    	k = tmod<double>(k, 6.0);
 
-		rgbd[i] = hsv.Value - (hsv.Value * hsv.Saturation * tmax<double>(0.0, tmin3<double>(k, 4.0 - k, 1.0)));
-	}
+	    	rgbd[i] = hsv.Value - (hsv.Value * hsv.Saturation * tmax<double>(0.0, tmin3<double>(k, 4.0 - k, 1.0)));
+	    }
 
-	rgb.Red = static_cast<uint8_t>(rgbd[0] * 255.0);
-	rgb.Green = static_cast<uint8_t>(rgbd[1] * 255.0);
-	rgb.Blue = static_cast<uint8_t>(rgbd[2] * 255.0);
+	    rgb.Red = static_cast<uint8_t>(rgbd[0] * 255.0);
+	    rgb.Green = static_cast<uint8_t>(rgbd[1] * 255.0);
+	    rgb.Blue = static_cast<uint8_t>(rgbd[2] * 255.0);
 
         return rgb;
     }
@@ -356,40 +350,40 @@ namespace Color {
         HSL hsl;
 
         /* scale our values to between [0, 1]
-	 * cast our vaules to T to ensure the compiler interprets it correctly
-	 */
-	double red = static_cast<double>(rgb.Red) / 255.0;
-	double green = static_cast<double>(rgb.Green) / 255.0;
-	double blue = static_cast<double>(rgb.Blue) / 255.0;
+	     * cast our vaules to T to ensure the compiler interprets it correctly
+	     */
+	    double red = static_cast<double>(rgb.Red) / 255.0;
+	    double green = static_cast<double>(rgb.Green) / 255.0;
+	    double blue = static_cast<double>(rgb.Blue) / 255.0;
 
-	double max = tmax3<double>(red, green, blue);
-	double min = tmin3<double>(red, green, blue);
+	    double max = tmax3<double>(red, green, blue);
+	    double min = tmin3<double>(red, green, blue);
 
-	/* calculate chroma */
-	double chroma = max - min;
+	    /* calculate chroma */
+	    double chroma = max - min;
 
-	double hue;
-	double saturation;
+	    double hue;
+	    double saturation;
 
-	/* calculate the lightness value by averaging max and min */
-	double lightness = (max + min) / 2.0;
+	    /* calculate the lightness value by averaging max and min */
+	    double lightness = (max + min) / 2.0;
 
-	/* color is achromatic and we don't need to calculate the hue */
-	if (max == min) {
-		hue = 0.0;
-		saturation = 0.0;
-	} else {
-		/* calculate saturation */
-		saturation = (lightness > 0.5) ? chroma / (2.0 - max - min) : chroma / (max + min);
+	    /* color is achromatic and we don't need to calculate the hue */
+	    if (max == min) {
+	    	hue = 0.0;
+	    	saturation = 0.0;
+	    } else {
+	    	/* calculate saturation */
+	    	saturation = (lightness > 0.5) ? chroma / (2.0 - max - min) : chroma / (max + min);
 
-		/* calculate color */
-                hue = Hue_From_Color(red, green, blue, max, chroma);
-	}
+	    	/* calculate color */
+            hue = Hue_From_Color(red, green, blue, max, chroma);
+	    }
 
-	/* scale the hue from distance to distance in degrees by multiplying by 60 */
+	    /* scale the hue from distance to distance in degrees by multiplying by 60 */
         hsl.Hue = hue * 60.0;
-	hsl.Saturation = saturation;
-	hsl.Lightness = lightness;
+	    hsl.Saturation = saturation;
+	    hsl.Lightness = lightness;
 
         return hsl;
     }
@@ -415,18 +409,18 @@ namespace Color {
         /* scale our values to between [0, 1]
          * cast our vaules to T to ensure the compiler interprets it correctly
          */
-	double red = static_cast<double>(rgb.Red) / 255.0;
-	double green = static_cast<double>(rgb.Green) / 255.0;
-	double blue = static_cast<double>(rgb.Blue) / 255.0;
+	    double red = static_cast<double>(rgb.Red) / 255.0;
+	    double green = static_cast<double>(rgb.Green) / 255.0;
+	    double blue = static_cast<double>(rgb.Blue) / 255.0;
 
-	double max = tmax3<double>(red, green, blue);
-	double min = tmin3<double>(red, green, blue);
+	    double max = tmax3<double>(red, green, blue);
+	    double min = tmin3<double>(red, green, blue);
 
-	/* calculate chroma */
-	double chroma = max - min;
+	    /* calculate chroma */
+	    double chroma = max - min;
 
         double hue;
-	double saturation;
+	    double saturation;
 
         double value = max;
 
@@ -435,7 +429,7 @@ namespace Color {
             saturation = 0.0;
         } else {
             /* calculate saturation */
-	    saturation = (max > 0.0) ? chroma / max : 0.0;
+	        saturation = (max > 0.0) ? chroma / max : 0.0;
 
             /* calculate color */
             hue = Hue_From_Color(red, green, blue, max, chroma);
@@ -443,8 +437,8 @@ namespace Color {
 
         /* scale the hue from distance to distance in degrees by multiplying by 60 */
         hsv.Hue = hue * 60.0;
-	hsv.Saturation = saturation;
-	hsv.Value = value;
+	    hsv.Saturation = saturation;
+	    hsv.Value = value;
 
         return hsv;
     }
